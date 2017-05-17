@@ -50,7 +50,10 @@ class Crawler:
         file_name = self.path + name + file_format
         data = requests.get(url)
         #file_name에다가 저장
-        res = self.controller.save_image(file_name, data)
+        try:
+            res = self.controller.save_image(file_name, data)
+        except OSError as e:
+            res = -1
 
         return res
 

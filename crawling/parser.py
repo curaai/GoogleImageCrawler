@@ -18,8 +18,12 @@ class Parser:
 
         for line in bs.findAll('img', {"class": tag}):
             try:
-                if line['height']:
+                if len(line['class']) == 1:
                     return line['src']
+                elif line['height']:
+                    return line['src']
+
             except KeyError as e:
                 continue
+
         return None

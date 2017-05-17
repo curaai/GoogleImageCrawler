@@ -26,17 +26,19 @@ def main():
             downloader.scroll_down()
             result_link = parser.result_image_page(downloader.browser.page_source, i)
 
+
         downloader.browser.get("https://google.com" + result_link)
 
         image_url = parser.get_image_url(downloader.browser.page_source, 'irc_mi')
-        res = downloader.downloadimage(str(download_count), image_url)
+        res = downloader.downloadimage(str(download_count + 1), image_url)
 
         if res == -1:
             image_url = parser.get_image_url(downloader.browser.page_source, 'irc_mut')
-            downloader.downloadimage(str(download_count), image_url)
+            downloader.downloadimage(str(download_count + 1), image_url)
 
-        download_count += 1
-        print(str(round(download_count / downloader.limit, 2) * 100) + "% downloaded")
+        if not res == -1:
+            download_count += 1
+            print(str(round(download_count / downloader.limit, 2) * 100) + "% downloaded")
 
         i += 1
         downloader.browser.back()
