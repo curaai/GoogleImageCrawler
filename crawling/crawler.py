@@ -8,11 +8,12 @@ import re
 #main class and use for dynamic web page
 class Crawler:
     def __init__(self, keyword, limit):
-        self.keyword = keyword
+        self.search_keyword = keyword
+        self.keyword = self.checkDirectoryName(keyword)
         self.limit = limit
         self.error_occurred = 0
         self.controller = filecontrol.Controller()
-        self.path = keyword + '/'
+        self.path = self.keyword + '/'
         self.default_format = '.jpg'
 
     def init_browser(self):
@@ -20,7 +21,7 @@ class Crawler:
         self.browser.get('https://www.google.com/imghp')
 
         search_field = self.browser.find_element_by_name('q')
-        search_field.send_keys(self.keyword)
+        search_field.send_keys(self.search_keyword)
         search_field.send_keys(Keys.RETURN)
 
     def scroll_down(self):
@@ -52,3 +53,14 @@ class Crawler:
 
     def has_number(self, string):
         return bool(re.search(r'\d', string))
+
+    def checkDirectoryName(self, str):
+        string = ""
+
+        for ch in str:
+            if bool(re.search(r'\W', ch)):
+                string += "_"
+            else:
+                string += ch
+
+        return string

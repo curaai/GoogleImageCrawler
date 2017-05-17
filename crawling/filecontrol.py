@@ -1,5 +1,6 @@
 import os
 import base64
+import re
 
 from PIL import Image
 from io import BytesIO
@@ -23,3 +24,4 @@ class Controller:
         data = base64.b64decode(data)
         with open(path + "." + file_format, 'wb') as f:
             f.write(data)
+

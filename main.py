@@ -1,19 +1,13 @@
 from crawling import crawler
-from urllib.request import urlopen
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from crawling.parser import Parser
-
-import time
 
 
 def main():
-    # print('구글에서 다운받고 싶은 이미지를 입력해주세요')
-    # keyword = input("입력 : ")
-    # count = int(input("이미지의 개수 : "))
+    print('구글에서 다운받고 싶은 이미지를 입력해주세요')
+    keyword = input("입력 : ")
+    count = int(input("이미지의 개수 : "))
 
-    downloader = crawler.Crawler('트와이스', 10)
+    downloader = crawler.Crawler(keyword, count)
     parser = Parser()
 
     print('Chrome 브라우저가 열릴 수 있습니다.')
