@@ -16,6 +16,7 @@ class Crawler:
         self.path = self.keyword + '/'
         self.default_format = '.jpg'
 
+    #브라우저 생성 및 이미지 검색 페이지 return
     def init_browser(self):
         self.browser = webdriver.Chrome('.\WebDriver\chromedriver.exe')
         self.browser.get('https://www.google.com/imghp')
@@ -24,12 +25,13 @@ class Crawler:
         search_field.send_keys(self.search_keyword)
         search_field.send_keys(Keys.RETURN)
 
+    #이미지가 없을 경우 스크롤해서 이미지를 추가함
     def scroll_down(self):
         scroll = self.browser.find_element_by_tag_name('html')
         scroll.send_keys(Keys.END)
 
 
-    #if success to download return 0 else return -1
+    #url으로 파일 포맷을 지정하여 저장함
     def downloadimage(self, name, url):
         if not url:
             return -1
@@ -47,6 +49,7 @@ class Crawler:
 
         file_name = self.path + name + file_format
         data = requests.get(url)
+        #file_name에다가 저장
         res = self.controller.save_image(file_name, data)
 
         return res

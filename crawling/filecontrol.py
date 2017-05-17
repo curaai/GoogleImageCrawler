@@ -7,16 +7,19 @@ from io import BytesIO
 
 
 class Controller:
+    #이미지 파일 저장
     def save_image(self, path, data):
         image = Image.open(BytesIO(data.content))
         image.save(path)
 
         return 0
 
+    #디렉토리 생성
     def makedirectory(self, keyword):
         if not os.path.exists(keyword):
             os.makedirs(keyword)
 
+    #url에 데이터가 있을 경우 url에서 바로 저장
     def save_data_url(self, path, url):
         head, data = url.split(',', 1)
         file_format = head.split(';')[0].split('/')[1]
