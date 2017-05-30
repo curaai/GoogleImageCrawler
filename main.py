@@ -1,48 +1,11 @@
-from crawling import crawler
-from crawling.parser import Parser
+import sys
+from PyQt4 import QtGui
+from GUI.design import Ui_Dialog
 
-
-def main():
-    print('구글에서 다운받고 싶은 이미지를 입력해주세요')
-    keyword = input("입력 : ")
-    count = int(input("이미지의 개수 : "))
-
-    downloader = crawler.Crawler(keyword, count)
-    parser = Parser()
-
-    print('Chrome 브라우저가 열릴 수 있습니다.')
-    downloader.init_browser()
-    downloader.controller.makedirectory(downloader.keyword)
-    
-    i = 0
-    download_count = 0
-    
-    while True:
-        if download_count >= downloader.limit:
-            break
-
-        result_link = parser.result_image_page(downloader.browser.page_source, i)
-        if result_link == -1:
-            downloader.scroll_down()
-            result_link = parser.result_image_page(downloader.browser.page_source, i)
-
-
-        downloader.browser.get("https://google.com" + result_link)
-
-        image_url = parser.get_image_url(downloader.browser.page_source, 'irc_mi')
-        res = downloader.downloadimage(str(download_count + 1), image_url)
-
-        if res == -1:
-            image_url = parser.get_image_url(downloader.browser.page_source, 'irc_mut')
-            downloader.downloadimage(str(download_count + 1), image_url)
-
-        if not res == -1:
-            download_count += 1
-            print(str(round(download_count / downloader.limit, 2) * 100) + "% downloaded")
-
-        i += 1
-        downloader.browser.back()
-
-    print('download successed')
-
-main()
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    Dialog = QtGui.QDialog()
+    ui = Ui_Dialog()
+    ui.setupUi(Dialog)
+    Dialog.show()
+    sys.exit(app.exec_())

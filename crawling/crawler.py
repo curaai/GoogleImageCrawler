@@ -55,7 +55,7 @@ class Crawler:
         except OSError as e:
             res = -1
 
-        return res
+        return file_name
 
     def has_number(self, string):
         return bool(re.search(r'\d', string))
