@@ -10,6 +10,8 @@ from crawling.parser import Parser
 
 from PyQt4 import QtCore, QtGui
 
+from bs4 import BeautifulSoup
+
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -92,6 +94,8 @@ class Ui_Dialog(object):
         self.countInsertLabel.setText(_translate("Dialog", "이미지 개수 입력", None))
 
     def start_crawling(self):
+        self.progressBar.setValue(0)
+
         self.keyword = self.keywordEdit.toPlainText().strip()
         self.widthScale = self.scaleWidthEdit.toPlainText()
         self.heightScale = self.scaleHeightEdit.toPlainText()
@@ -102,6 +106,7 @@ class Ui_Dialog(object):
 
         #alert 창 띄우기
         downloader.init_browser()
+        downloader.set_size(1280,720)
         downloader.controller.makedirectory(downloader.keyword)
 
         i = 0
@@ -126,12 +131,14 @@ class Ui_Dialog(object):
                 imageUrl = parser.get_image_url(downloader.browser.page_source, 'irc_mut')
                 res = downloader.downloadimage(str(downloadCount + 1), imageUrl)
 
-            if not res == -1:
-                downloadCount += 1
-                temp = round(downloadCount / downloader.limit, 2) *100
-                while gauge < temp:
-                    gauge += 0.0001
-                    self.progressBar.setValue(gauge)
+            downloadCount += 1
+            temp = round(downloadCount / downloader.limit, 2) * 100
+
+            # while gauge < temp:
+            #     gauge += 0.0001
+            self.progressBar.setValue(temp)
 
             i += 1
             downloader.browser.back()
+
+        downloader.browser.close()

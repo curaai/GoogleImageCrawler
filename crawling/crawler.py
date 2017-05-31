@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 
 import requests
 import re
+import time
 
 #main class and use for dynamic web page
 class Crawler:
@@ -24,6 +25,19 @@ class Crawler:
         search_field = self.browser.find_element_by_name('q')
         search_field.send_keys(self.search_keyword)
         search_field.send_keys(Keys.RETURN)
+
+    #원하는 이미지의 사이즈를 설정함
+    def set_size(self, width, height):
+        self.browser.find_element_by_class_name("hdtb-tl").click()
+        self.browser.find_element_by_class_name("hdtb-mn-hd").click()
+        self.browser.find_element_by_class_name("exylnk").click()
+
+        widthField = self.browser.find_element_by_xpath('//*[@class="ktf mini exymm exyw"]')
+        heightField = self.browser.find_element_by_xpath('//*[@class="ktf mini exymm exyh"]')
+
+        widthField.send_keys(width)
+        heightField.send_keys(height)
+        widthField.send_keys(Keys.RETURN)
 
     #이미지가 없을 경우 스크롤해서 이미지를 추가함
     def scroll_down(self):
