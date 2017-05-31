@@ -4,17 +4,21 @@ from selenium.webdriver.common.keys import Keys
 
 import requests
 import re
-import time
+
 
 #main class and use for dynamic web page
 class Crawler:
-    def __init__(self, keyword, limit):
+    def __init__(self, keyword, limit, dirPath):
+        if dirPath == "":
+            self.controller.makedirectory(keyword)
+            dirPath = keyword
+
         self.search_keyword = keyword
         self.keyword = self.checkDirectoryName(keyword)
         self.limit = limit
         self.error_occurred = 0
         self.controller = filecontrol.Controller()
-        self.path = self.keyword + '/'
+        self.path = dirPath + '/'
         self.default_format = '.jpg'
 
     #브라우저 생성 및 이미지 검색 페이지 return
