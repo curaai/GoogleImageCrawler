@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="30934025-538a-4973-b781-8176bf8df086" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/GUI/design.py" afterPath="$PROJECT_DIR$/GUI/design.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/crawling/crawler.py" afterPath="$PROJECT_DIR$/crawling/crawler.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/crawling/parser.py" afterPath="$PROJECT_DIR$/crawling/parser.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-    </list>
+    <list default="true" id="30934025-538a-4973-b781-8176bf8df086" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
