@@ -9,15 +9,16 @@ import re
 #main class and use for dynamic web page
 class Crawler:
     def __init__(self, keyword, limit, dirPath):
+        self.controller = filecontrol.Controller()
+
+        self.keyword = self.checkDirectoryName(keyword)
         if dirPath == "":
-            self.controller.makedirectory(keyword)
-            dirPath = keyword
+            self.controller.makedirectory(self.keyword)
+            dirPath = self.keyword
 
         self.search_keyword = keyword
-        self.keyword = self.checkDirectoryName(keyword)
         self.limit = limit
         self.error_occurred = 0
-        self.controller = filecontrol.Controller()
         self.path = dirPath + '/'
         self.default_format = '.jpg'
 

@@ -7,6 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 from crawling.crawler import Crawler
 from crawling.parser import Parser
+from threading import Thread
 
 from PyQt4 import QtCore, QtGui
 
@@ -99,12 +100,15 @@ class Ui_Dialog(object):
         self.setScale.setText(_translate("Dialog", "크기 지정", None))
         self.alphabetX.setText(_translate("Dialog", "X", None))
         self.countInsertLabel.setText(_translate("Dialog", "이미지 개수 입력", None))
-        self.label.setText(_translate("Dialog", "위 칸에 안적으면 모든 사이즈를 다운로드 합니다.", None))
+        self.label.setText(_translate("Dialog", "크기 지정을 안하면 모든 사이즈를 다운로드 합니다.", None))
         self.dirSelect.setText(_translate("Dialog", "저장 폴더 선택", None))
 
     def selectDir(self):
         self.dirPath = str(QtGui.QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\',
                                                          QtGui.QFileDialog.ShowDirsOnly))
+
+    def temp(self):
+        Thread(target=self.start_crawling).start()
 
     def start_crawling(self):
         self.progressBar.setValue(0)
@@ -147,6 +151,7 @@ class Ui_Dialog(object):
 
             downloadCount += 1
             temp = round(downloadCount / downloader.limit, 2) * 100
+
             while gauge < temp:
                 gauge += 0.0001
                 self.progressBar.setValue(gauge)
