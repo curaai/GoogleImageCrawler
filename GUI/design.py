@@ -7,12 +7,12 @@
 # WARNING! All changes made in this file will be lost!
 from crawling.crawler import Crawler
 from crawling.parser import Parser
+from crawling.filecontrol import Controller
 from threading import Thread
+import time
 
 from PyQt4 import QtCore, QtGui
 import PyQt4.uic
-
-from bs4 import BeautifulSoup
 
 
 class MainDialog(QtGui.QDialog):
@@ -21,15 +21,12 @@ class MainDialog(QtGui.QDialog):
 
         self.ui = PyQt4.uic.loadUi("GUI\design.ui", self)
 
-        self.ui.dirSelect.clicked.connect(self.selectDir)
+        self.ui.dirSelect.clicked.connect(self.select_dir)
         self.ui.startCrawling.clicked.connect(lambda x: Thread(target=self.start_crawling()).start)
 
-    def selectDir(self):
+    def select_dir(self):
         self.dirPath = str(QtGui.QFileDialog.getExistingDirectory(None, 'Select a folder:', 'C:\\',
                                                          QtGui.QFileDialog.ShowDirsOnly))
-
-    def temp(self):
-        Thread(target=self.start_crawling).start()
 
     def start_crawling(self):
         self.progressBar.setValue(0)
@@ -39,45 +36,39 @@ class MainDialog(QtGui.QDialog):
         heightScale = self.scale_height_edit.text()
         self.limit = int(self.image_count_edit.text())
 
-        downloader = Crawler(self.keyword, self.limit, self.dirPath)
-        parser = Parser()
+        c = Crawler(self.keyword, self.limit)
+        controller = Controller(self.dirPath)
+        p = Parser()
 
-        # alert 창 띄우기
-        downloader.init_browser()
-        if widthScale != "" and heightScale != "":
-            downloader.set_size(widthScale, heightScale)
-        downloader.controller.makedirectory(downloader.keyword)
+        c.init_browser()
+        if widthScale and heightScale:
+            c.set_size(widthScale, heightScale)
 
-        i = 0
         downloadCount = 0
         gauge = 0
-
         while True:
-            if downloadCount >= downloader.limit:
+            if downloadCount >= c.limit:
                 break
 
-            resultLink = parser.result_image_page(downloader.browser.page_source, i)
-            if resultLink == -1:
-                downloader.scroll_down()
-                resultLink = parser.result_image_page(downloader.browser.page_source, i)
+            res = c.click_image(downloadCount)
+            while res == -1:
+                c.scroll_down()
+                c.click_image(downloadCount)
+            time.sleep(.5)
 
-            downloader.browser.get("https://google.com" + resultLink)
+            url = p.get_image_url(c.browser.page_source)
+            if url is None:
+                continue
 
-            imageUrl = parser.get_image_url(downloader.browser.page_source, 'irc-mi')
-            res = downloader.downloadimage(str(downloadCount + 1), imageUrl)
-
-            if res == -1:
-                imageUrl = parser.get_image_url(downloader.browser.page_source, 'irc_mut')
-                res = downloader.downloadimage(str(downloadCount + 1), imageUrl)
+            data, fileFormat = p.download_image(url)
+            controller.save_image(data, str(downloadCount), fileFormat)
 
             downloadCount += 1
-            temp = round(downloadCount / downloader.limit, 2) * 100
+            temp = round(downloadCount / c.limit, 2) * 100
 
+            time.sleep(1)
             while gauge < temp:
-                gauge += 1
+                gauge += 0.001
                 self.progressBar.setValue(gauge)
 
-            i += 1
-            downloader.browser.back()
-
-        downloader.browser.close()
+        c.browser.close()

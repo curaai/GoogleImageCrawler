@@ -1,18 +1,16 @@
 import os
 import base64
-import re
-
-from PIL import Image
-from io import BytesIO
 
 
 class Controller:
-    #이미지 파일 저장
-    def save_image(self, path, data):
-        image = Image.open(BytesIO(data.content))
-        image.save(path)
+    def __init__(self, path):
+        self.path = path
 
-        return 0
+    #이미지 파일 저장
+    def save_image(self, data, name, format):
+        f = open(self.path + '//' + name + format, 'wb')
+        f.write(data)
+        f.close()
 
     #디렉토리 생성
     def makedirectory(self, keyword):
@@ -27,4 +25,3 @@ class Controller:
         data = base64.b64decode(data)
         with open(path + "." + file_format, 'wb') as f:
             f.write(data)
-
